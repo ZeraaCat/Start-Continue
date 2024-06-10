@@ -1,0 +1,75 @@
+#Navigation Screen 
+
+init python:
+    # Define a function to restart the game
+    def restart_game():
+        renpy.restart()
+    persistent.new_game_clicked = False 
+default persistent.new_game_clicked = True
+
+screen navigation:
+    add "temp/logo.png" ypos 0.1 xpos 0.6
+
+        ### Debug Quick Menu ###
+    vbox:
+        anchor(0, 0)
+        xpos 0.77
+        ypos 0.7
+        spacing 10
+        label _("Debug Quick Menu")
+        textbutton "Chapter 1" action Start("chapter_1"):
+            style "slime_textbutton"
+        textbutton "Chapter 2" action Start("chapter_2"):
+            style "slime_textbutton"
+        textbutton "Chapter 3" action Start("chapter_3"):
+            style "slime_textbutton"
+        textbutton "Chapter 4" action Start("chapter_4"):
+            style "slime_textbutton"
+        # textbutton _("ResetInventory") action achievement.clear_all() style "slime_textbutton"
+
+    vbox:
+        style_prefix "navigation"
+        xpos 0.8
+        yalign 0.5
+        spacing gui.navigation_spacing
+        
+
+        ## Define the style for the textbuttons
+        
+        if main_menu:
+            
+            textbutton _("New Game") action ShowMenu("confirm_start") style "navigation_textbutton" 
+            
+            textbutton _("Continue") action Continue() style "navigation_textbutton"
+
+        else:
+            
+            textbutton _("Save") action ShowMenu("save") style "navigation_textbutton" 
+
+        textbutton _("Load Game") action ShowMenu("load")  style "navigation_textbutton" 
+        textbutton _("A.S.H. Archive") action ShowMenu("inventory") style "navigation_textbutton" 
+        textbutton _("Settings") action ShowMenu("preferences") style "navigation_textbutton" 
+
+        if _in_replay:
+            textbutton _("End Replay") action EndReplay(confirm=True) style "navigation_textbutton"
+        elif not main_menu:
+            textbutton _("Main Menu") action MainMenu() style "navigation_textbutton" 
+
+        textbutton _("Credits") action ShowMenu("about") style "navigation_textbutton" 
+        # textbutton _("History") action ShowMenu("history") style "navigation_textbutton" 
+       
+        # if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+        #     textbutton _("Help") action ShowMenu("help") style "navigation_textbutton"
+        
+        if renpy.variant("pc"):
+            textbutton _("Quit") action Quit(confirm=not main_menu) style "navigation_textbutton"
+
+
+#confirm start screen
+screen confirm_start:
+    modal True
+    add "system/system_popup.png" xpos 0.3 ypos 0.2
+    hbox:
+        text _("Are you sure you want to start a new game?") xpos 1.2 ypos 4.3
+        textbutton _("Yes") action Start() xpos 1.5 ypos 4.6
+        textbutton _("No") action Function(renpy.hide_screen, "confirm_start") xpos 1.8 ypos 4.6
