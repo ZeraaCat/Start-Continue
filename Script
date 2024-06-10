@@ -1,0 +1,7 @@
+label start:
+    $ achievement.clear_all()
+    $ persistent._clear()
+    $ renpy.clear_retain()
+    $ renpy.restart_interaction() 
+    call chapter_1 from _call_chapter_1
+    return
